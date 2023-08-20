@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <meta name='viewport'
+        content='width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0'>
+  <meta http-equiv='X-UA-Compatible' content='ie=edge'>
+  <title>nest</title>
+  <script src='https://unpkg.com/axios@0.24.0/dist/axios.min.js'></script>
+</head>
+<body>
+<input type='file' name='file' id='file' multiple>
+<button type='submit'>submit</button>
+
+<script>
+  const input = document.getElementById('file');
+  const button = document.querySelector('button[type="submit"]');
+  const { axios } = window;
+  const instance = axios.create({
+    baseURL: 'http://localhost:3000',
+    headers: {
+      'content-type': 'multipart/form-data',
+    },
+  });
+
+
+  button.addEventListener('click', () => {
+    const formData = new FormData();
+    formData.append('filename', 'picture');
+    formData.append('name', 'zhaowanting');
+    formData.append('age', 123);
+    for (const file of input.files) {
+      console.log(file);
+      formData.append(file.name, file);
+    }
+    instance.post('/person/form-data', formData).then(res => {
+      console.log(res.data);
+    });
+  });
+
+
+</script>
+</body>
+</html>
